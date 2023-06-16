@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require("cors");
 
 const app = express();
-const port = 3000;
+const port = 3100;
 const bodyParser = require('body-parser');
 
 
@@ -49,7 +49,17 @@ if ( req.body.username !== null && req.body.pkey !== null){
 
 }
 });
+app.post('/loginKey',(req,res)=>{
+  try {
+    const check = steem.auth.wifIsValid(req.body.pkey, req.body.pubKey);
+    res.status(200).json(check)
+  }catch (e){
+    res.status(400).json({data:"Please Provide Valid Public Memo Key "})
 
+  }
+
+
+});
 
 // Start the server
 app.listen(port, () => {
