@@ -15,20 +15,20 @@ app.use(bodyParser.urlencoded({
 }));
 app.post('/login', (req, res) => {
 
-  // console.log("request "+JSON.stringify(req.body))
+  console.log("request "+JSON.stringify(req.body))
 if ( req.body.username !== null && req.body.pkey !== null){
-
-    steem.api.getAccounts([req.body.username], function(err, result) {
+  const username = req.body.username.toString();
+  steem.api.getAccounts([username], function(err, result) {
       try{
-        var pubWif= result[0].memo_key;
+        const pubWif = result[0].memo_key;
 
         const metadata = JSON.parse(result[0].posting_json_metadata).profile;
-          const clientName = metadata.name;
+          const clientName = result[0].name;
         const clientImage = metadata.profile_image;
 
         //
         console.log( clientImage+" "+ clientName);
-        var check = steem.auth.wifIsValid(req.body.pkey,pubWif)
+        const check = steem.auth.wifIsValid(req.body.pkey, pubWif);
         const data = {
           account_validate : check,
           clientName : clientName,
